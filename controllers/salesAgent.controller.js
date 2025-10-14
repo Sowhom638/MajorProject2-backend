@@ -29,14 +29,8 @@ async function createSalesAgent(req, res) {
 
 async function getAllSalesAgents(req, res) {
     try {
-        const agents = await SalesAgent.find({}, 'name email'); // Only select name and email
-
-        const formattedAgents = agents.map(agent => ({
-            id: agent._id.toString(),
-            ...agent._doc
-        }));
-
-        return res.status(200).json(formattedAgents);
+        const agents = await SalesAgent.find(); // Only select name and email
+        if(agents.length > 0 ) return res.status(200).json(agents);
     } catch (error) {
         console.error('Error fetching sales agents:', error);
         return res.status(500).json({ error: 'Failed to fetch sales agents.' });
