@@ -33,9 +33,9 @@ async function getAllLeads(req, res) {
 
 async function getLeadsById(req, res) {
     try {
-        const leads = await Lead.findById(req.params.id).populate('salesAgent');
-        if (leads.length > 0) {
-            res.status(200).json({ message: 'Leads fetched successfully', leads });
+        const lead = await Lead.findById(req.params.id).populate('salesAgent');
+        if (lead) {
+            res.status(200).json({ message: 'Leads fetched successfully', lead });
         }else{
             res.status(404).json({ message: 'No leads found' });
         }
