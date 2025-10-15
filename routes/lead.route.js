@@ -4,6 +4,7 @@ const router = express.Router();
 const {
    createLead,
     getAllLeads,
+    getLeadsById,
     updateLeadById,
     deleteLeadById
 } = require('../controllers/lead.controller');
@@ -11,6 +12,7 @@ const {
 
 router.get('/', getAllLeads);
 router.post('/', createLead);
+router.get('/:id', getLeadsById);
 router.post('/:id', updateLeadById);
 router.delete('/:id', deleteLeadById);
 

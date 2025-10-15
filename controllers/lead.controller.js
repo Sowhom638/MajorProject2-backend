@@ -31,6 +31,19 @@ async function getAllLeads(req, res) {
     }
 }
 
+async function getLeadsById(req, res) {
+    try {
+        const leads = await Lead.findById(req.params.id).populate('salesAgent');
+        if (leads.length > 0) {
+            res.status(200).json({ message: 'Leads fetched successfully', leads });
+        }else{
+            res.status(404).json({ message: 'No leads found' });
+        }
+    } catch (error) {
+        res.status(400).json({ message: 'Error fetching leads: ' + error });
+    }
+}
+
 async function updateLeadById(req, res) {
     try {
         const updatedLead = await Lead.findOneAndUpdate(req.params.id, req.body, {new: true}).populate('salesAgent');
@@ -60,6 +73,7 @@ async function deleteLeadById(req, res) {
 module.exports = {
     createLead,
     getAllLeads,
+    getLeadsById,
     updateLeadById,
     deleteLeadById
 };
