@@ -74,7 +74,8 @@ async function updateLeadById(req, res) {
 
 async function deleteLeadById(req, res) {
     try {
-        const deletedLead = await Lead.findOneAndDelete(req.params.id);
+        const { id } = req.params;
+        const deletedLead = await Lead.findOneAndDelete({_id: id});
         if (deletedLead) {
             res.status(200).json({ message: 'Lead deleted successfully', lead: deletedLead });
         }else{
