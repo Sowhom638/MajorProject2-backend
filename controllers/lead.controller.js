@@ -74,40 +74,15 @@ async function updateLeadById(req, res) {
 
 async function deleteLeadById(req, res) {
     try {
-        const { id } = req.params;
-
-        // 🔒 Step 1: Validate that the ID is a valid MongoDB ObjectId
-        if (!Types.ObjectId.isValid(id)) {
-            return res.status(400).json({ 
-                message: 'Invalid lead ID: not a valid ObjectId' 
-            });
+        const deletedLead = await Lead.findOneAndDelete(req.params.id);
+        if (deletedLead) {
+            res.status(200).json({ message: 'Lead deleted successfully', lead: deletedLead });
+        }else{
+            res.status(404).json({ message: 'Lead not found' });
         }
-
-        // 🔍 Step 2: Use findByIdAndDelete (it handles casting safely)
-        const deletedLead = await Lead.findByIdAndDelete(id);
-
-        if (!deletedLead) {
-            return res.status(404).json({ 
-                message: 'Lead not found' 
-            });
-        }
-
-        // ✅ Success
-        return res.status(200).json({
-            message: 'Lead deleted successfully',
-            lead: deletedLead
-        });
-
     } catch (error) {
-        // 🚨 Log the real error for debugging (never expose raw error in prod!)
-        console.error('Error in deleteLeadById:', error);
-
-        // Return generic 500 to client
-        return res.status(500).json({
-            message: 'Failed to delete lead due to server error'
-        });
+        res.status(400).json({ message: 'Error deleting lead: ' + error });
     }
-
 }
 
 module.exports = {
