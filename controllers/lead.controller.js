@@ -74,14 +74,25 @@ async function updateLeadById(req, res) {
 
 async function deleteLeadById(req, res) {
     try {
-        const deletedLead = await Lead.findOneAndDelete(req.params.id);
-        if (deletedLead) {
-            res.status(200).json({ message: 'Lead deleted successfully', lead: deletedLead });
-        }else{
-            res.status(404).json({ message: 'Lead not found' });
+        const { id } = req.params;
+
+        if (!Types.ObjectId.isValid(id)) {
+            return res.status(400).json({ message: 'Invalid lead ID format' });
         }
+
+        const deletedLead = await Lead.findOneAndDelete({ _id: id });
+
+        if (!deletedLead) {
+            return res.status(404).json({ message: 'Lead not found' });
+        }
+
+        res.status(200).json({ 
+            message: 'Lead deleted successfully',
+            lead: deletedLead 
+        });
     } catch (error) {
-        res.status(400).json({ message: 'Error deleting lead: ' + error });
+        console.error('Delete lead error:', error);
+        res.status(500).json({ message: 'Internal server error' });
     }
 }
 
