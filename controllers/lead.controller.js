@@ -46,14 +46,29 @@ async function getLeadsById(req, res) {
 
 async function updateLeadById(req, res) {
     try {
-        const updatedLead = await Lead.findOneAndUpdate(req.params.id, req.body, {new: true}).populate('salesAgent');
-        if (updatedLead) {
-            res.status(200).json({ message: 'Leads updated successfully', lead: updatedLead });
-        }else{
-            res.status(404).json({ message: 'Lead not found' });
+        const { id } = req.params;
+
+        const updatedLead = await Lead.findOneAndUpdate(
+            { _id: id },
+            req.body,
+            { 
+                new: true
+            }
+        ).populate('salesAgent');
+
+        if (!updatedLead) {
+            return res.status(404).json({ message: 'Lead not found' });
         }
+
+        res.status(200).json({ 
+            message: 'Lead updated successfully', 
+            lead: updatedLead 
+        });
     } catch (error) {
-        res.status(400).json({ message: 'Error updating lead: ' + error });
+        console.error("Update lead error:", error);
+        res.status(400).json({ 
+            message: 'Error updating lead: ' + error.message 
+        });
     }
 }
 
