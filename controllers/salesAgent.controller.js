@@ -30,14 +30,30 @@ async function createSalesAgent(req, res) {
 async function getAllSalesAgents(req, res) {
     try {
         const agents = await SalesAgent.find(); // Only select name and email
-        if(agents.length > 0 ) return res.status(200).json(agents);
+        if (agents.length > 0) return res.status(200).json(agents);
     } catch (error) {
         console.error('Error fetching sales agents:', error);
         return res.status(500).json({ error: 'Failed to fetch sales agents.' });
     }
 }
 
+async function deleteSalesAgent(req, res) {
+    try {
+        const { id } = req.params;
+        const agent = await SalesAgent.findOneAndDelete({ _id: id }); // Only select name and email
+        if (agents.length > 0) {
+            res.status(200).json({ message: 'SalesAgent deleted successfully', agent });
+        } else {
+            res.status(404).json({ message: 'SalesAgent not found' });
+        }
+    } catch (error) {
+        console.error('Error deleting sales agent:', error);
+        return res.status(500).json({ error: 'Failed to delete sales agent.' });
+    }
+}
+
 module.exports = {
     createSalesAgent,
-    getAllSalesAgents
+    getAllSalesAgents,
+    deleteSalesAgent
 };
