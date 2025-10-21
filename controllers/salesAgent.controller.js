@@ -41,7 +41,7 @@ async function deleteSalesAgent(req, res) {
     try {
         const { id } = req.params;
         const agent = await SalesAgent.findOneAndDelete({ _id: id }); // Only select name and email
-        if (agent.length > 0) {
+        if (agent) {
             res.status(200).json({ message: 'SalesAgent deleted successfully', agent });
         } else {
             res.status(404).json({ message: 'SalesAgent not found' });
