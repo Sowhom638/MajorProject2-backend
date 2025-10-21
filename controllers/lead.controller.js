@@ -7,7 +7,7 @@ async function createLead(req, res) {
         const findAgent = await SalesAgent.findById(salesAgent);
         if (!findAgent) return res.status(404).json({ message: 'SalesAgent ID not found' }); // ← Added return
         
-        if(name && source && salesAgent && status && tags && timeToClose && priority ){
+        if(name && source && salesAgent && status && tags && timeToClose >= 0 && priority ){
             const newLead = new Lead({ name, source, salesAgent, status, tags, timeToClose, priority });
             const savedLead = await newLead.save();
             return res.status(201).json({ message: 'Lead created successfully', lead: savedLead }); // ← Added return
