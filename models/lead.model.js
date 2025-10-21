@@ -28,7 +28,7 @@ const leadSchema = new mongoose.Schema({
   timeToClose: {
     type: Number,
     required: [true, 'Time to Close is required'],
-    min: [1, 'Time to Close must be a positive number'],  // Positive integer validation
+    min: [0, 'Time to Close must be a positive number'],  // Positive integer validation
   },
   priority: {
     type: String,
