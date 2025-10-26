@@ -47,7 +47,7 @@ async function getLeadsById(req, res) {
                 if (diffMs <= 0) {
                     remainingDays = 0;
                 } else {
-                    remainingDays = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
+                    remainingDays = diffMs;
                 }
             }
 
