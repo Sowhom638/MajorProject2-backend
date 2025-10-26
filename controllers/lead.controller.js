@@ -35,8 +35,31 @@ async function getLeadsById(req, res) {
     try {
         const lead = await Lead.findById(req.params.id).populate('salesAgent');
         if (lead) {
-            res.status(200).json({ message: 'Leads fetched successfully', lead });
-        }else{
+            // Calculate remaining days only if lead is not closed
+            let remainingDays = null;
+            
+            if (lead.status !== 'Closed') {
+                const now = new Date();
+                const targetCloseDate = new Date(lead.createdAt);
+                targetCloseDate.setDate(targetCloseDate.getDate() + lead.timeToClose);
+                
+                const diffMs = targetCloseDate - now;
+                if (diffMs <= 0) {
+                    remainingDays = 0;
+                } else {
+                    remainingDays = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
+                }
+            }
+
+            // Add remainingDays to the response
+            res.status(200).json({ 
+                message: 'Leads fetched successfully', 
+                lead: {
+                    ...lead.toObject(),
+                    remainingDays
+                }
+            });
+        } else {
             res.status(404).json({ message: 'No leads found' });
         }
     } catch (error) {
