@@ -56,7 +56,7 @@ async function getLeadsById(req, res) {
                 message: 'Leads fetched successfully', 
                 lead: {
                     ...lead.toObject(),
-                    remainingDays
+                    timeToClose: remainingDays
                 }
             });
         } else {
